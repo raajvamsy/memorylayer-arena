@@ -2,7 +2,8 @@ FROM node:22-bookworm-slim
 
 # Native addons (tree-sitter, better-sqlite3, hnswlib) need a C++ toolchain.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 make g++ ca-certificates curl \
+    python3 python3-pip make g++ ca-certificates curl \
+  && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g @raajvamsy/memorylayer --ignore-scripts

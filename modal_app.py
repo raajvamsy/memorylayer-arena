@@ -23,8 +23,9 @@ import modal
 
 app = modal.App("memorylayer-arena")
 
-# Reuses the Render Dockerfile (Node 22, native rebuilds, embedding pre-cache).
-image = modal.Image.from_dockerfile("Dockerfile")
+# Node image has python3 for apt but not Modal's expected `python`+`pip` on PATH.
+# add_python installs a compatible standalone Python for Modal's web_server wrapper.
+image = modal.Image.from_dockerfile("Dockerfile", add_python="3.11")
 
 # Tune via env when deploying, e.g.:
 #   MODAL_SCALEDOWN_WINDOW=120 modal deploy modal_app.py
