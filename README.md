@@ -6,17 +6,16 @@ The [Trust Arena](https://memorylayer.in/arena) on Vercel calls this service ove
 
 ## Why a separate repo?
 
-The main [MemoryLayer](https://github.com/raajvamsy/MemoryLayer) monorepo pins Node via `node/package.json`, which caused Render to pick **Node 26** and fail native module builds. This repo pins **Node 22 LTS** explicitly ([Render node version docs](https://render.com/docs/node-version)).
+The main [MemoryLayer](https://github.com/raajvamsy/MemoryLayer) monorepo pins Node via `node/package.json`, which caused Render to pick **Node 26** and fail native module builds. This repo deploys via **Docker** (`node:22-bookworm-slim` + build toolchain) so `tree-sitter` and other native addons compile reliably.
 
 ## Deploy on Render (Free tier)
 
 ### Option A — Blueprint (recommended)
 
-1. Push this repo to GitHub.
-2. Render Dashboard → **New** → **Blueprint**.
-3. Connect `raajvamsy/memorylayer-arena`.
-4. Set `MEMORY_API_KEY` when prompted (`sk-ml-...` from [memorylayer.in/dashboard](https://memorylayer.in/dashboard)).
-5. Deploy.
+1. Render Dashboard → **New** → **Blueprint** (or **Generate Blueprint** from project menu).
+2. Connect `raajvamsy/memorylayer-arena`.
+3. Set `MEMORY_API_KEY` when prompted (`sk-ml-...` from [memorylayer.in/dashboard](https://memorylayer.in/dashboard)).
+4. Deploy. Render builds from `Dockerfile` (`runtime: docker` in `render.yaml`).
 
 ### Option B — Manual Web Service
 
@@ -26,9 +25,8 @@ The main [MemoryLayer](https://github.com/raajvamsy/MemoryLayer) monorepo pins N
 
 | Field | Value |
 |-------|-------|
-| **Runtime** | Node |
-| **Build Command** | `npm install -g @raajvamsy/memorylayer` |
-| **Start Command** | `memorylayer start --host 0.0.0.0 --port $PORT --data /data` |
+| **Language / Runtime** | **Docker** (not Node) |
+| **Dockerfile Path** | `./Dockerfile` |
 | **Health Check Path** | `/health` |
 | **Instance Type** | Free |
 
@@ -40,7 +38,7 @@ The main [MemoryLayer](https://github.com/raajvamsy/MemoryLayer) monorepo pins N
 | `MEMORY_HOST` | `0.0.0.0` |
 | `MEMORY_DATA_DIR` | `/data` |
 
-Node version is pinned by `.node-version` (`22.14.0`) — do **not** connect the MemoryLayer monorepo here.
+Do **not** use Render's Native Node runtime — it lacks the C++ toolchain and fails on `tree-sitter-markdown`. Do **not** connect the MemoryLayer monorepo here.
 
 ## Wire Vercel
 

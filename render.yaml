@@ -1,14 +1,12 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
-# Deploy: Render Dashboard → New → Blueprint → connect this repo
 services:
   - type: web
     name: memorylayer-demo-engine
-    runtime: node
+    runtime: docker
     plan: free
     region: virginia
     branch: main
-    buildCommand: npm install -g @raajvamsy/memorylayer
-    startCommand: memorylayer start --host 0.0.0.0 --port $PORT --data /data
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     envVars:
       - key: MEMORY_API_KEY
