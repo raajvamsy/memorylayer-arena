@@ -7,7 +7,9 @@ services:
     region: virginia
     branch: main
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /health
+    # healthCheckPath omitted until @raajvamsy/memorylayer >1.3.4 — published server
+    # returns 401 on GET /health when MEMORY_API_KEY is set on 0.0.0.0. Render then
+    # never marks the deploy live. Re-enable /health after npm publish with auth fix.
     envVars:
       - key: MEMORY_API_KEY
         sync: false
