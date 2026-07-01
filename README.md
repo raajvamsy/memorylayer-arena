@@ -40,6 +40,8 @@ The main [MemoryLayer](https://github.com/raajvamsy/MemoryLayer) monorepo pins N
 
 Do **not** use Render's Native Node runtime — it lacks the C++ toolchain and fails on `tree-sitter-markdown`. Do **not** connect the MemoryLayer monorepo here.
 
+The `Dockerfile` installs via `--ignore-scripts`, rebuilds native addons, then compiles `tree-sitter-markdown` with `CXXFLAGS=-fexceptions` (its scanner uses C++ exceptions). Full image build takes ~2–3 minutes on Render.
+
 ## Wire Vercel
 
 After deploy, set on the `web` Vercel project:
