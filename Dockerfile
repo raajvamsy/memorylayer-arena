@@ -1,4 +1,4 @@
-# cache-bust: 2026-07-06 (v1.3.12 — cert-pin fix for silent free-tier downgrade)
+# cache-bust: 2026-07-09 (v1.3.13 — WCM cold-start fix, chunked storage triple extraction fix)
 FROM node:22-bookworm-slim
 
 # Native addons (tree-sitter, better-sqlite3, hnswlib) need a C++ toolchain.
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @raajvamsy/memorylayer@1.3.12 --ignore-scripts
+RUN npm install -g @raajvamsy/memorylayer@1.3.13 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
