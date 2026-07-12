@@ -1,18 +1,20 @@
-# cache-bust: 2026-07-10 (v1.4.0 — publish/sync tarball fix, org-scoped publishing, additive triples[] param for remember())
+# cache-bust: 2026-07-13 (v1.4.1 — hnswlib-node replaced with usearch (fixes Node>22 install failures), Node engine guard)
 FROM node:22-bookworm-slim
 
-# Native addons (tree-sitter, better-sqlite3, hnswlib) need a C++ toolchain.
+# Native addons (tree-sitter, better-sqlite3) need a C++ toolchain.
+# usearch ships prebuilt N-API binaries (no toolchain/rebuild needed) — replaced
+# hnswlib-node in v1.4.1, which had no prebuild path and broke on Node >22.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip make g++ ca-certificates curl \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @raajvamsy/memorylayer@1.4.0 --ignore-scripts
+RUN npm install -g @raajvamsy/memorylayer@1.4.1 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
     cd "$ML" && \
-    npm rebuild better-sqlite3 hnswlib-node tree-sitter tree-sitter-css \
+    npm rebuild better-sqlite3 tree-sitter tree-sitter-css \
       tree-sitter-gdscript tree-sitter-go tree-sitter-groovy tree-sitter-html \
       tree-sitter-java tree-sitter-javascript tree-sitter-kotlin tree-sitter-python \
       tree-sitter-ruby tree-sitter-rust tree-sitter-swift tree-sitter-typescript && \
