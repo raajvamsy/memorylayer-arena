@@ -1,4 +1,4 @@
-# cache-bust: 2026-07-13 (v1.4.1 — hnswlib-node replaced with usearch (fixes Node>22 install failures), Node engine guard)
+# cache-bust: 2026-07-16 (v1.5.0 — mandatory device-code login, premium module self-heal)
 FROM node:22-bookworm-slim
 
 # Native addons (tree-sitter, better-sqlite3) need a C++ toolchain.
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @raajvamsy/memorylayer@1.4.1 --ignore-scripts
+RUN npm install -g @raajvamsy/memorylayer@1.5.0 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
