@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @raajvamsy/memorylayer@1.5.1 --ignore-scripts
+RUN npm install -g @raajvamsy/memorylayer@1.5.2 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
