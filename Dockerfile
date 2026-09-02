@@ -1,4 +1,4 @@
-# cache-bust: 2026-08-16 (v1.7.0 — import fan-in graph + ranking fix)
+# cache-bust: 2026-09-02 (v1.7.0 — clean uninstall + reinstall)
 FROM node:22-bookworm-slim
 
 # Native addons (tree-sitter, better-sqlite3) need a C++ toolchain.
@@ -9,7 +9,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @raajvamsy/memorylayer@1.7.0 --ignore-scripts
+# Explicit uninstall so Modal layer cache / prior global installs cannot leave 1.3.x behind.
+RUN npm uninstall -g @raajvamsy/memorylayer 2>/dev/null || true && \
+    npm cache clean --force && \
+    rm -rf /usr/local/lib/node_modules/@raajvamsy/memorylayer /usr/local/bin/memorylayer && \
+    npm install -g @raajvamsy/memorylayer@1.7.0 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
