@@ -1,4 +1,4 @@
-# cache-bust: 2026-09-02 (v1.7.0 — clean uninstall + reinstall)
+# cache-bust: 2026-09-20 (v1.7.1 — scoped install command + mcpName for MCP registry)
 FROM node:22-bookworm-slim
 
 # Native addons (tree-sitter, better-sqlite3) need a C++ toolchain.
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN npm uninstall -g @raajvamsy/memorylayer 2>/dev/null || true && \
     npm cache clean --force && \
     rm -rf /usr/local/lib/node_modules/@raajvamsy/memorylayer /usr/local/bin/memorylayer && \
-    npm install -g @raajvamsy/memorylayer@1.7.0 --ignore-scripts
+    npm install -g @raajvamsy/memorylayer@1.7.1 --ignore-scripts
 
 # Rebuild native addons; tree-sitter-markdown alone needs -fexceptions (uses C++ throw/catch).
 RUN ML=/usr/local/lib/node_modules/@raajvamsy/memorylayer && \
